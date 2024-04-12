@@ -14,8 +14,8 @@ import math
 
 class ImagePreprocessing:
     """
+    A class for performing image preprocessing tasks related to pose detection and movement analysis.
     """
-
     def __init__(self):
         # Logging the creation of ImagePreprocessing object
         logging.info("ImagePreprocessing object created")
@@ -240,70 +240,3 @@ class ImagePreprocessing:
             return "Down"
         else:
             return "Standing"
-
-
-if __name__ == "__main__":
-    ImagePreprocessor = ImagePreprocessing()
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("Error: Unable to open video file.")
-        exit()
-
-    # Set the width and height properties
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 960)
-    cv2.namedWindow("feed", cv2.WINDOW_NORMAL)
-
-    cond = True
-    center_y = 0
-
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
-        # Convert frame to RGB format
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        # Process frame using Pose model
-        results = ImagePreprocessor.pose_model.process(frame_rgb)
-        if cond:
-            initial_shoulder_coordinates = ImagePreprocessor.get_initial_shoulder_coordinates(
-                frame, results)
-            y_right = initial_shoulder_coordinates["right_shoulder"][1]
-            y_left = initial_shoulder_coordinates["left_shoulder"][1]
-            center_y = (y_right + y_left)//2
-            cond = False
-        # Flip the frame horizontally for natural (selfie-view) visualization.
-        frame = cv2.flip(frame, 1)
-
-        frame_height, frame_width, _ = frame.shape
-        frame = ImagePreprocessor.draw_horizontal_and_vertical_lines(
-            frame, center_y)
-        hand_joined_status = ImagePreprocessor.check_hands_joined(
-            frame, results)
-        if hand_joined_status == "Hands Joined":
-            color = (0, 255, 0)
-            cv2.putText(frame, hand_joined_status, (10, 30),
-                        cv2.FONT_HERSHEY_PLAIN, 2, color, 3)
-        elif hand_joined_status == "Hands Not Joined":
-            color = (0, 0, 255)
-            cv2.putText(frame, hand_joined_status, (10, 30),
-                        cv2.FONT_HERSHEY_PLAIN, 2, color, 3)
-
-        horizontal_status = ImagePreprocessor.check_left_right(frame, results)
-        if horizontal_status != None:
-            cv2.putText(frame, horizontal_status, (5, frame_height - 10),
-                        cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 3)
-
-        vertical_status = ImagePreprocessor.check_up_down(
-            frame, center_y, results)
-        if vertical_status != None:
-            cv2.putText(frame, vertical_status, (frame_width-150, frame_height - 10),
-                        cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 3)
-
-        cv2.imshow("feed", frame)
-
-        if cv2.waitKey(10) & 0xff == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
