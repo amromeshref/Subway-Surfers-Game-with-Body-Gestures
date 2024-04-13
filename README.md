@@ -38,10 +38,14 @@ You can install the dependencies using pip:
 
 - **App Class (app.py)**: Inherits functionalities from ImagePreprocessing class and implements the main application logic. It captures video frames, processes them for pose detection, and simulates keyboard inputs based on detected movements to control the Subway Surfers game.
 
-## Configuration
+## How It Works
 
-The configuration for this project is stored in a config file. You can adjust parameters such as minimum detection confidence, tracking confidence, line thresholds, and distance thresholds in the config file.
+The application works by capturing video frames from the webcam, processing them using pose detection algorithms, and interpreting the detected poses to control the Subway Surfers game. Here's how it works:
 
-## Credits
+1. **Image Preprocessing**: The `image_processing.py` script preprocesses each frame to detect poses and analyze movements.
+   
+2. **Pose Detection**: The application uses the MediaPipe library to detect key body landmarks such as shoulders, wrists, and joints in each frame.
+   
+3. **Interpreting Movements**: Based on the detected poses, the application determines the player's movements, such as whether their hands are joined, if they are moving left, right, up, or down.
 
-This project was created by [Your Name]. It utilizes the MediaPipe library for pose detection and PyAutoGUI for simulating keyboard inputs.
+4. **Controlling the Game**: Using PyAutoGUI, the application simulates keyboard inputs (such as pressing the spacebar, arrow keys) to control the Subway Surfers game, translating the detected movements into in-game actions.
