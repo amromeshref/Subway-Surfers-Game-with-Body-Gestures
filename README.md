@@ -2,6 +2,36 @@
 
 This project integrates pose detection using MediaPipe to control movements in the Subway Surfers game. Users can interact with the game using their body movements detected through a camera.
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [How It Works](#how-it-works)
+- [Functionality](#functionality)
+- [Configuration](#configuration)
+- [Credits](#credits)
+
+## Introduction
+
+This repository contains two Python scripts:
+
+- **image_processing.py**: Handles image preprocessing tasks related to pose detection and movement analysis.
+- **app.py**: Runs the application, capturing video frames from the webcam, processing them for pose detection, and simulating keyboard inputs to control the game based on detected movements.
+
+## Requirements
+
+Before running the scripts, ensure you have the following dependencies installed:
+
+- Python 3.x
+- OpenCV
+- MediaPipe
+- PyAutoGUI
+
+You can install the dependencies using pip:
+
+
+
 ## Introduction
 
 This repository contains two Python scripts:
