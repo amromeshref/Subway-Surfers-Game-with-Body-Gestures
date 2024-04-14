@@ -1,4 +1,4 @@
-# Playing Subway Surfers Game using Pose Detection
+# Playing Subway Surfers Game with Body Gestures
 
 This project integrates pose detection using MediaPipe to control movements in the Subway Surfers game. Users can interact with the game using their body movements detected through a camera.
 
