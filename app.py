@@ -86,7 +86,7 @@ class App(ImagePreprocessing):
                             else:
                                 logging.info("Game stopped")
                                 game_stop = not game_stop
-                                pyautogui.press("esc")
+                                pyautogui.press("space")
                             counter = 0
                     else:
                         # Display "Hands Not Joined" status on the frame
