@@ -27,15 +27,17 @@ class App(ImagePreprocessing):
                 logging.error("Error opening video capture device")
                 exit()
             # Set the width and height properties of the video capture device
-            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 960)
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 700)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1280)
             # Create a named window for displaying the video feed
-            cv2.namedWindow("feed", cv2.WINDOW_NORMAL)
+            #cv2.namedWindow("feed", cv2.WINDOW_NORMAL)
 
             # Initialize variables
             counter = 0
             number_of_frames = 15
             start_game = False
+            initiate_game = False 
+            game_stop = False
             center_y = 0
             prev_horizontal_status = None
             prev_vertical_status = None
@@ -67,19 +69,23 @@ class App(ImagePreprocessing):
                         counter += 1
                         # Check if hands have been joined for a certain number of frames
                         if counter == number_of_frames:
-                            # If game has not started yet, start the game and initialize variables
-                            if not start_game:
-                                logging.info("Game started")
-                                pyautogui.press("space")
-                                start_game = True
+                            if not initiate_game:
+                                logging.info("Game initiation")
                                 initial_shoulder_coordinates = self.get_initial_shoulder_coordinates(
                                     frame, results)
                                 y_right = initial_shoulder_coordinates["right_shoulder"][1]
                                 y_left = initial_shoulder_coordinates["left_shoulder"][1]
                                 center_y = (y_right + y_left)//2
+                                initiate_game = True
+                            # If game has not started yet, start the game and initialize variables
+                            elif not start_game:
+                                logging.info("Game started")
+                                pyautogui.press("space")
+                                start_game = True
                             # If game has already started, stop the game
                             else:
                                 logging.info("Game stopped")
+                                game_stop = not game_stop
                                 pyautogui.press("esc")
                             counter = 0
                     else:
@@ -87,14 +93,25 @@ class App(ImagePreprocessing):
                         cv2.putText(frame, hand_joined_status, (10, 30),
                                     cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 3)
                         counter = 0
+                    
+                    if not initiate_game:
+                        cv2.putText(frame, "Join hands to initiate the game", (5, frame_height - 10), cv2.FONT_HERSHEY_PLAIN,
+                                    2, (0, 255, 0), 3)
+                    elif not start_game:
+                        cv2.putText(frame, "Practise Movements. To Start the Game, Join Your Hands", (130, frame_height-100), cv2.FONT_HERSHEY_PLAIN,
+                                    2, (0, 255, 0), 3)
+                    
+                    if game_stop:
+                        cv2.putText(frame, "Game Stopped. Join Your Hands to Resume", (240, frame_height-100), cv2.FONT_HERSHEY_PLAIN,
+                                    2, (0, 0, 255), 3)
 
                     # Draw horizontal and vertical lines on the frame if the game has started
-                    if start_game:
+                    if start_game or initiate_game:
                         frame = self.draw_horizontal_and_vertical_lines(
                             frame, center_y)
 
                     # Check for left-right movement
-                    if start_game:
+                    if start_game or initiate_game:
                         # Get the horizontal movement status
                         horizontal_status = self.check_left_right(
                             frame, results)
@@ -106,20 +123,24 @@ class App(ImagePreprocessing):
                             if horizontal_status == "Center":
                                 if prev_horizontal_status == "Left":
                                     logging.info("Move Right")
-                                    pyautogui.press("right")
+                                    if start_game and not game_stop:
+                                        pyautogui.press("right")
                                 elif prev_horizontal_status == "Right":
                                     logging.info("Move Left")
-                                    pyautogui.press("left")
+                                    if start_game and not game_stop:
+                                        pyautogui.press("left")
                             if horizontal_status == "Left":
                                 logging.info("Move Left")
-                                pyautogui.press("left")
+                                if start_game and not game_stop:
+                                    pyautogui.press("left")
                             if horizontal_status == "Right":
                                 logging.info("Move Right")
-                                pyautogui.press("right")
+                                if start_game and not game_stop:
+                                    pyautogui.press("right")
                             prev_horizontal_status = horizontal_status
 
                     # Check for up-down movement
-                    if start_game:
+                    if start_game or initiate_game:
                         # Get the vertical movement status
                         vertical_status = self.check_up_down(
                             frame, center_y, results)
@@ -130,11 +151,14 @@ class App(ImagePreprocessing):
                         if vertical_status != prev_vertical_status:
                             if vertical_status == "Up":
                                 logging.info("Move Up")
-                                pyautogui.press("up")
+                                if start_game and not game_stop:
+                                    pyautogui.press("up")
                             if vertical_status == "Down":
                                 logging.info("Move Down")
-                                pyautogui.press("down")
+                                if start_game and not game_stop:
+                                    pyautogui.press("down")
                             prev_vertical_status = vertical_status
+
                 # Display the frame in the named window
                 cv2.imshow("feed", frame)
                 # Check for key press to exit the loop
