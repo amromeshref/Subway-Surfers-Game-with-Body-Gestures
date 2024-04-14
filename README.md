@@ -66,5 +66,5 @@ Before running the scripts, ensure you have the following dependencies installed
 
 1. Run the application:
    ```
-   python app.py
+   python3 app.py
    ```
