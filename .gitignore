@@ -2,3 +2,4 @@ logs/
 notebook/
 src/logs/
 src/__pycache__
+src/visualize_movements.py
