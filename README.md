@@ -23,7 +23,7 @@ Welcome to the Subway Surfers Pose Detection project! This innovative applicatio
 
 ## Functionality
 
-- **ImagePreprocessing Class (src/image_processing.py)**: Handles image preprocessing tasks such as getting initial shoulder coordinates, drawing lines on the frame, calculating distances, and checking for hands joined, left-right movement, and up-down movement.
+- **ImagePreprocessing Class (image_processing.py)**: Handles image preprocessing tasks such as getting initial shoulder coordinates, drawing lines on the frame, calculating distances, and checking for hands joined, left-right movement, and up-down movement.
 
 - **App Class (app.py)**: Inherits functionalities from ImagePreprocessing class and implements the main application logic. It captures video frames, processes them for pose detection, and simulates keyboard inputs based on detected movements to control the Subway Surfers game.
 
@@ -31,7 +31,7 @@ Welcome to the Subway Surfers Pose Detection project! This innovative applicatio
 
 The application works by capturing video frames from the webcam, processing them using pose detection algorithms, and interpreting the detected poses to control the Subway Surfers game. Here's how it works:
 
-1. **Image Preprocessing**: The `image_processing.py` script preprocesses each frame to detect poses and analyze movements.
+1. **Image Preprocessing**: The `src/image_processing.py` script preprocesses each frame to detect poses and analyze movements.
    
 2. **Pose Detection**: The application uses the MediaPipe library to detect key body landmarks such as shoulders, wrists, and joints in each frame.
    
