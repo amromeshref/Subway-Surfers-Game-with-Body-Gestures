@@ -8,7 +8,7 @@ import cv2
 import pyautogui
 from src.exception import CustomException
 from src.logger import logging
-from src.image_preprocessing import ImagePreprocessing
+from src.image_processing import ImagePreprocessing
 
 
 class App(ImagePreprocessing):
