@@ -64,7 +64,7 @@ Before running the scripts, ensure you have the following dependencies installed
    pip install -r requirements.txt
    ```
 
-1. Run the application:
+1. Open the Subway Surfers game on your device and then run the application:
    ```
    python3 app.py
    ```
